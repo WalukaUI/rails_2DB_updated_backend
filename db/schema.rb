@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2023_03_23_230108) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_07_223519) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -143,6 +143,19 @@ ActiveRecord::Schema[8.0].define(version: 2023_03_23_230108) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.bigint "users_id", null: false
+    t.bigint "doctors_id", null: false
+    t.bigint "patients_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctors_id"], name: "index_sessions_on_doctors_id"
+    t.index ["patients_id"], name: "index_sessions_on_patients_id"
+    t.index ["users_id"], name: "index_sessions_on_users_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "password_digest"
@@ -156,4 +169,7 @@ ActiveRecord::Schema[8.0].define(version: 2023_03_23_230108) do
   add_foreign_key "appointments", "doctors"
   add_foreign_key "appointments", "patients"
   add_foreign_key "cities", "countries"
+  add_foreign_key "sessions", "doctors", column: "doctors_id"
+  add_foreign_key "sessions", "patients", column: "patients_id"
+  add_foreign_key "sessions", "users", column: "users_id"
 end

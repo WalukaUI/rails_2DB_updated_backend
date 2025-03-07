@@ -9,30 +9,30 @@ class EmployeesController < ApplicationController
       else
         employee =Employee.all
       end
-      render json: employee.to_json(except: [:created_at, :updated_at])
+      render json: employee.to_json(except: [ :created_at, :updated_at ])
     end
 
     def show
         employee = Employee.find(params[:id])
         render json: employee, include: :city
-      end
+    end
 
     def create
         employee = Employee.create!(employee_params)
-        render json: employee.to_json(except: [:created_at, :updated_at]), status: :created
+        render json: employee.to_json(except: [ :created_at, :updated_at ]), status: :created
     end
 
     def update
       employee = Employee.find(params[:id])
       employee.update!(employee_params)
-      render json: employee.to_json(except: [:created_at, :updated_at])
+      render json: employee.to_json(except: [ :created_at, :updated_at ])
     end
 
     def destroy
-      empl=Employee.find(params[:id])
+      # empl=Employee.find(params[:id])
       # DeleteEmployeeMailer.delete_employee(empl).deliver_now
       employee = Employee.destroy(params[:id])
-      render json: {message: "Employee deleted"}
+      render json: { message: "Employee deleted" }
     end
 
     def projects_index
@@ -45,7 +45,7 @@ class EmployeesController < ApplicationController
 
     def employee_params
         params.permit(:name, :section, :role, :department_id, :city_id)
-      end
+    end
 
     def render_not_found
         render json: { error: "Employee is not found" }, status: :not_found

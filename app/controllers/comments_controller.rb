@@ -5,41 +5,41 @@ class CommentsController < ApplicationController
 
     def index
         comment = Comment.all
-        render json: comment.to_json(except: [:created_at, :updated_at])
-      end
+        render json: comment.to_json(except: [ :created_at, :updated_at ])
+    end
 
-      def show
+    def show
         comment = Comment.find(params[:id])
-        render json: comment.to_json(except: [:created_at, :updated_at]), status: 200
-      end
+        render json: comment.to_json(except: [ :created_at, :updated_at ]), status: 200
+    end
 
-      def create
+    def create
         comment = Comment.create(comment_params)
-        render json: comment.to_json(except: [:created_at, :updated_at]), status: 201
-      end
+        render json: comment.to_json(except: [ :created_at, :updated_at ]), status: 201
+    end
 
-      def update
+    def update
         comment = Comment.find(params[:id])
         comment.update!(comment_params)
-        render json: comment.to_json(except: [:created_at, :updated_at])
-      end
+        render json: comment.to_json(except: [ :created_at, :updated_at ])
+    end
 
-      def destroy
+    def destroy
         comment = Comment.destroy(params[:id])
-        render json: {message: "Comment deleted"}
-      end
+        render json: { message: "Comment deleted" }
+    end
 
-      private
+    private
 
-      def comment_params
+    def comment_params
         params.permit(:doctor_id, :patient_id, :comment, :points)
-      end
+    end
 
-      def render_not_found
+    def render_not_found
         render json: { error: "Comment is not found" }, status: :not_found
-      end
+    end
 
-      def render_unprocessable_entity(invalid)
+    def render_unprocessable_entity(invalid)
         render json: { errors: invalid.record.errors }, status: :unprocessable_entity
-      end
+    end
 end

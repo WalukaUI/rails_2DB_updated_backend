@@ -14,12 +14,12 @@ class ProjectsController < ApplicationController
 
     def show
         project = Project.find(params[:id])
-        render json: project.to_json(except: [:created_at, :updated_at]), status: 200
-      end
+        render json: project.to_json(except: [ :created_at, :updated_at ]), status: 200
+    end
 
     def create
         project = Project.create(project_params)
-        render json: project.to_json(except: [:created_at, :updated_at]), status: 201
+        render json: project.to_json(except: [ :created_at, :updated_at ]), status: 201
     end
 
     def employee_index
@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
 
     def project_params
         params.permit(:name, :section, :role, :department_id, :city_id)
-      end
+    end
 
     def render_not_found
         render json: { error: "Project is not found" }, status: :not_found

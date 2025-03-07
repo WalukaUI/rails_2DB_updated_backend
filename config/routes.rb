@@ -4,19 +4,20 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
-
+  resource :session
+  resources :passwords, param: :token
   resources :comments
   resources :appointments
   resources :doctor_locations
   resources :doctors
   resources :locations
-  resources :patients 
+  resources :patients
   resources :users
   resources :departments
   resources :cities
-  resources :countries, only: [:show, :index]
+  resources :countries, only: [ :show, :index ]
 
-  #, only: [:show, :index]
+  # ,only: [ :show, :index ]
   post "/signuppatient", to: "patients#create"
   post "/signupdoctor", to: "doctors#create"
   post "/signup", to: "users#create"
@@ -29,26 +30,26 @@ Rails.application.routes.draw do
   delete "/cnc/logout", to: "sessions#cnc_user_destroy"
 
   resources :locations do
-    resources :doctors, only: [:show, :index]
+    resources :doctors, only: [ :show, :index ]
   end
 
   resources :doctors do
-    resources :locations, only: [:show, :index]
-    resources :patients, only: [:show, :index]
-    resources :appointments, only: [:show, :index]
+    resources :locations, only: [ :show, :index ]
+    resources :patients, only: [ :show, :index ]
+    resources :appointments, only: [ :show, :index ]
   end
 
   resources :patients do
-    resources :doctors, only: [:show, :index]
-    resources :appointments, only: [:show, :index]
+    resources :doctors, only: [ :show, :index ]
+    resources :appointments, only: [ :show, :index ]
   end
 
   resources :employees do
-    resources :projects, only: [:show, :index]
+    resources :projects, only: [ :show, :index ]
   end
 
   resources :projects do
-    resources :employees, only: [:show, :index]
+    resources :employees, only: [ :show, :index ]
   end
   # Defines the root path route ("/")
   # root "posts#index"

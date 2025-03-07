@@ -6,50 +6,50 @@ class AppointmentsController < ApplicationController
         if params[:doctor_id]
           doctor = Doctor.find(params[:doctor_id])
           appointment = doctor.appointments
-          appointments_with_patient_data=appointment.to_json(include: [:patient], except: [:created_at, :updated_at])
+          appointments_with_patient_data=appointment.to_json(include: [ :patient ], except: [ :created_at, :updated_at ])
           render json: appointments_with_patient_data
         elsif params[:patient_id]
           patient = Patient.find(params[:patient_id])
           appointment = patient.appointments
-          render json: appointment.to_json(except: [:created_at, :updated_at])
+          render json: appointment.to_json(except: [ :created_at, :updated_at ])
         else
           appointment = Appointment.all
         end
-      end
+    end
 
-      def show
+    def show
         appointment = Appointment.find(params[:id])
-        render json: appointment.to_json(except: [:created_at, :updated_at]), status: 200
-      end
+        render json: appointment.to_json(except: [ :created_at, :updated_at ]), status: 200
+    end
 
-      def create
+    def create
         appointment = Appointment.create!(appointment_params)
         # AppointmentMailer.new_appointment(appointment).deliver_later
-        render json: appointment.to_json(except: [:created_at, :updated_at]), status: :created
-      end
+        render json: appointment.to_json(except: [ :created_at, :updated_at ]), status: :created
+    end
 
-      def update
+    def update
         appointment = Appointment.find(params[:id])
         appointment.update!(appointment_params)
-        render json: appointment.to_json(include: [:patient], except: [:created_at, :updated_at])
-      end
+        render json: appointment.to_json(include: [ :patient ], except: [ :created_at, :updated_at ])
+    end
 
-      def destroy
+    def destroy
         appointment = Appointment.destroy(params[:id])
-        render json: {message: "Appointment deleted"}
-      end
+        render json: { message: "Appointment deleted" }
+    end
 
-      private
+    private
 
-      def appointment_params
+    def appointment_params
         params.permit(:doctor_id, :patient_id, :date, :time, :status)
-      end
+    end
 
-      def render_not_found
+    def render_not_found
         render json: { error: "Comment is not found" }, status: :not_found
-      end
+    end
 
-      def render_unprocessable_entity(invalid)
+    def render_unprocessable_entity(invalid)
         render json: { errors: invalid.record.errors }, status: :unprocessable_entity
-      end
+    end
 end
